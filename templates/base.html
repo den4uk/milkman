@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Milkman of the Week</title>
+    <link rel="shortcut icon" href="https://milk.saz.lt/favicon.ico" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome.min.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='timeline.css') }}">
+<body>
+    <nav class="navbar navbar-light bg-light navbar-inverse_">
+        <a href="{{ url_for('index') }}" class="navbar-brand h2"> &#x1F376; MILKMAN</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('login') }}">{% if session.admin %}Admin{% else %}Login{% endif %}</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container" style="margin-bottom: 60px;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{category}}">{{message}}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- CONTAINER -->
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+<footer class="footer small text-muted">
+    Powered by <a href="http://flask.pocoo.org" target="_blank">Flask</a> |
+    Fork this on <a href="https://github.com/den4uk/milkman" target="_blank">Github</a> |
+    Follow me <a href="https://twitter.com/den4uk" target="_blank">@den4uk</a>
+</footer>
+
+</body>
+</html>

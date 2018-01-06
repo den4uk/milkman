@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<ul class="timeline">
+	{% for d in data %}
+    <li class="{{ loop.cycle('odd', 'timeline-inverted') }}">
+        <div class="timeline-badge {% if loop.first %}success{% endif %}">
+        	{% if loop.first %}
+        	<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        	{% else %}
+        	<i class="fa fa-coffee" aria-hidden="true"></i>
+        	{% endif %}
+        </div>
+        <div class="timeline-panel">
+        <div class="timeline-heading">
+            <h4 class="timeline-title">{{d.name}}</h4>
+            <p><small class="text-muted"><i class="fa fa-calendar" aria-hidden="true"></i> {{d.buy_date.strftime('%a, %d %b')}}</small></p>
+        </div>
+        <!-- <div class="timeline-body">
+        	<p></p>
+        </div> -->
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+{% if data|length == 0 %}
+<div class="row">
+    <p class="font-italic font-weight-light mx-auto">No Milkmen Were Yet Added</p>
+</div>
+{% endif %}
+
+{% endblock content %}

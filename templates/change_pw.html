@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+{% include 'admin_nav.html' %}
+
+<h3>Change Password</h3>
+
+<div class="form-inline">
+	<form action="" method="POST" class="input-group">
+		{{form.user(placeholder="Username", class="form-control", readonly=True)}}
+		{{form.passwd(placeholder="Password", class="form-control")}}
+		{{form.passwd2(placeholder="Confirm Password", class="form-control")}}
+		<div class="input-group-append">
+			<button class="btn btn-primary" name="change-password">Change</button>
+		</div>
+	</form>
+</div>
+
+{% endblock content %}
