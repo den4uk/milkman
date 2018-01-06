@@ -18,10 +18,12 @@ Features include:
 4. Install your dependables:
 ```$ pip install -r requirements.txt```
 5. Initialise the database for the app:
-```$ python
+```
+$ python
 >>> from milk import *
 >>> init_db()
->>> exit()```
+>>> exit()
+```
 6. Run the app in a development mode:
 ```$ python milk.py```
 
