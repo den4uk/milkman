@@ -24,7 +24,15 @@ $ python
 >>> init_db()
 >>> exit()
 ```
-6. Run the app in a development mode:
+6. Configure the ```config.py``` file with your SMTP settings. Here is an example:
+```
+MAIL_SERVER = 'smtp.example.com'
+MAIL_PORT = 587
+MAIL_USE_TLS = True
+MAIL_USERNAME ='someone@example.com'
+MAIL_PASSWORD = 'pa$$w@rd'
+```
+7. Run the app in a development mode:
 ```$ python milk.py```
 
 ## Example
