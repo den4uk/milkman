@@ -5,7 +5,7 @@ This is a simple web app, its intention is to run an office milk purchasing club
 If someone purchases milk once a week (or at other intervals), an email is sent to the 'Milkman'.
 Features include:
 * Adding/removing/pausing/resuming participants
-* Chaining the intervals how often milk is purchased
+* Changing the intervals how often milk is purchased
 * E-mailing a reminder to the 'Milkman'
 * Customising an e-mail template
 
