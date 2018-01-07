@@ -35,5 +35,9 @@ MAIL_PASSWORD = 'pa$$w@rd'
 7. Run the app in a development mode:
 ```$ python milk.py```
 
+Default login details:
+User: ```admin```
+Password: ```admin```
+
 ## Example
 Current example of the app in action: https://milk.saz.lt
