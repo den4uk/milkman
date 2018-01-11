@@ -36,8 +36,12 @@ MAIL_PASSWORD = 'pa$$w@rd'
 ```$ python milk.py```
 
 Default login details:
+
 User: ```admin```
+
 Password: ```admin```
+
+Change the password once logged in!
 
 ## Example
 Current example of the app in action: https://milk.saz.lt

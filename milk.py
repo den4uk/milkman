@@ -6,7 +6,8 @@ from itertools import cycle, count
 from collections import OrderedDict
 from passlib.hash import sha256_crypt
 from flask_sqlalchemy import SQLAlchemy
-from wtforms import Form, StringField, IntegerField, PasswordField, DateField, SelectField, TextField, validators
+from flask_wtf import FlaskForm
+from wtforms import StringField, IntegerField, PasswordField, DateField, SelectField, TextField, validators
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 
@@ -48,17 +49,17 @@ class Milkmen(db.Model):
 	active = db.Column(db.Boolean, default=True)
 
 
-class LoginForm(Form):
+class LoginForm(FlaskForm):
 	user = StringField('', [validators.DataRequired()])
 	passwd = PasswordField('', [validators.DataRequired()])
 
 
-class UserForm(Form):
+class UserForm(FlaskForm):
 	name = StringField('', [validators.DataRequired()])
 	email = StringField('')
 
 
-class ChangePasswordForm(Form):
+class ChangePasswordForm(FlaskForm):
 	user = StringField('', [validators.DataRequired()])
 	passwd = PasswordField('Password', [
 		validators.DataRequired(),
@@ -68,7 +69,7 @@ class ChangePasswordForm(Form):
 	passwd2 = PasswordField('', [validators.DataRequired()])
 
 
-class SettingsForm(Form):
+class SettingsForm(FlaskForm):
 	offset = IntegerField('Offset')
 	starts = DateField('Start Date', [validators.DataRequired()])
 	period = SelectField(
@@ -77,7 +78,7 @@ class SettingsForm(Form):
 		)
 
 
-class EmailForm(Form):
+class EmailForm(FlaskForm):
 	display = StringField('From Name', [validators.DataRequired()])
 	subject = StringField('Subject', [validators.DataRequired()])
 	body = TextField('E-Mail Body', [validators.DataRequired()])
@@ -109,7 +110,7 @@ def login():
 	if session.get('admin'):
 		return redirect('/dashboard')
 	form = LoginForm(request.form)
-	if request.method == 'POST' and form.validate():
+	if request.method == 'POST' and form.validate_on_submit():
 		U = Settings.query.filter_by(user=form.user.data).first()
 		if U and sha256_crypt.verify(form.passwd.data, U.passwd):
 			session.update({'admin': True})
@@ -124,7 +125,7 @@ def login():
 def dashboard():
 	settings = Settings.query.get_or_404(1)
 	form = SettingsForm(request.form, obj=settings)
-	if request.method == 'POST' and 'controls' in request.form and form.validate():
+	if request.method == 'POST' and 'controls' in request.form and form.validate_on_submit():
 		form.populate_obj(settings)
 		db.session.commit()
 		return redirect('/dashboard')
@@ -143,7 +144,7 @@ def change_password():
 	settings = Settings.query.get_or_404(1)
 	form = ChangePasswordForm(request.form)
 	form.user.data = settings.user
-	if request.method == 'POST' and form.validate():
+	if request.method == 'POST' and form.validate_on_submit():
 		settings.user = request.form.get('user')
 		settings.passwd = sha256_crypt.encrypt(request.form.get('passwd'))
 		db.session.commit()
@@ -163,7 +164,7 @@ def user_manage():
 		elif 'del_user' in request.form:
 			user = Milkmen.query.get_or_404(request.form.get('del_user'))
 			db.session.delete(user)
-		elif 'add_user' in request.form and form.validate():
+		elif 'add_user' in request.form and form.validate_on_submit():
 			new = Milkmen(name=form.name.data, email=form.email.data)
 			db.session.add(new)
 		db.session.commit()
@@ -177,7 +178,7 @@ def user_manage():
 def user_edit(user=None):
 	user = Milkmen.query.get_or_404(user)
 	form = UserForm(request.form, obj=user)
-	if request.method == 'POST' and form.validate():
+	if request.method == 'POST' and form.validate_on_submit():
 		form.populate_obj(user)
 		db.session.commit()
 		return redirect('/manage')
@@ -190,7 +191,7 @@ def user_edit(user=None):
 def email_settings():
 	settings = Settings.query.get_or_404(1)
 	form = EmailForm(request.form, obj=settings)
-	if request.method == 'POST' and form.validate():
+	if request.method == 'POST' and form.validate_on_submit():
 		form.populate_obj(settings)
 		db.session.commit()
 		job = cron.get_jobs()[0]

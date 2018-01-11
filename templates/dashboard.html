@@ -4,6 +4,7 @@
 
 <h3>Settings</h3>
 <form action="" method="POST" class="">
+    {{form.csrf_token}}
 	<input type="hidden" name="controls">
 	<div class="form-group row">
 		<label for="period" class="col-3 col-md-2 col-form-label">{{form.period.label}}</label>
@@ -21,6 +22,7 @@
 <h3>Move Offset <small class="text-muted">({{form.offset.data}})</small></h3>
 <div class="row">
 	<form action="" method="POST" class="mx-auto">
+        {{form.csrf_token}}
 		<button class="btn btn-lg btn-outline-dark" name="move_offset" value="up"><i class="fa fa-arrow-up" aria-hidden="true"></i></button>
 		<button class="btn btn-lg btn-outline-dark" name="move_offset" value="down"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
 	</form>

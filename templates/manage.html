@@ -17,6 +17,7 @@
 		<td>{{u.email}}</td>
 		<td>
 			<form action="" method="POST">
+				{{form.csrf_token}}
 				<a class="btn btn-sm btn-warning" href="{{ url_for('user_edit', user=u.id) }}" title="Edit user details">Edit</a>
 				{% if not u.active %}
 				<button class="btn btn-sm btn-primary" name="active_user" value="{{u.id}}" title="Resume milking">&#x25B6;</button>
@@ -32,6 +33,7 @@
 
 <div class="form-inline">
 	<form action="" method="POST" class="input-group">
+		{{form.csrf_token}}
 		<input type="hidden" name="add_user">
 		{{form.name(placeholder="Name", class="form-control")}}
 		{{form.email(placeholder="E-Mail", class="form-control")}}

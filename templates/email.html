@@ -5,6 +5,7 @@
 <h3>E-Mail Settings</h3>
 
 <form action="" method="POST" class="">
+	{{form.csrf_token}}
 	<div class="form-group row">
 		<label for="display" class="col-3 col-md-2 col-form-label">{{form.display.label}}</label>
 		<div class="col-9 col-md-4">{{form.display(class="form-control")}}</div>
