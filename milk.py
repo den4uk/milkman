@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, session, redirect, url_for, flash
 from flask_mail import Mail, Message
 from functools import wraps
-from datetime import datetime, timedelta, date
+from datetime import timedelta, date
 from itertools import cycle, count
 from collections import OrderedDict
 from passlib.hash import sha256_crypt
@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, PasswordField, DateField, SelectField, TextField, validators
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 import atexit
 
 
@@ -16,7 +17,9 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 mail = Mail(app)
-cron = BackgroundScheduler()
+cron = BackgroundScheduler(
+	jobstores={'default': SQLAlchemyJobStore(url=app.config['SQLALCHEMY_DATABASE_URI'])}
+	)
 
 
 # Decorator for admin login requirements
