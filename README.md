@@ -45,3 +45,76 @@ Change the password once logged in!
 
 ## Example
 Current example of the app in action: https://milk.saz.lt
+
+## Bonus: Deployment Suggestion
+(Global configurations are provided, however, virtualenv is recommended)
+
+* Suggested server: Ubuntu server (or a Raspberry Pi)
+* Setup a domain/ddns/dyndns; assumed domain: ```milkman.dnsexample.com```
+* Assumed location for the source code: ```/opt/milkman/```
+* Install ```gunicorn``` (WSGI server) using pip:
+```$ sudo pip install gunicorn```
+
+* Setup ```systemctl``` service (so gunicorn runs on system reboots):
+```
+$ sudo nano /etc/systemd/system/milkapp.service
+```
+
+```
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/opt/milkman
+ExecStart=`which gunicorn` --workers 1 --reload --preload --access-logfile - --bind 0.0.0.0:8001 milk:app
+
+[Install]
+WantedBy=multi-user.target
+```
+
+* Now activate the new service:
+```
+$ sudo systemctl daemon-reload
+$ sudo systemctl start milkapp
+```
+
+* Install ```nginx``` for use as web proxy:
+```$ sudo apt-get install nginx-full```
+
+* Create a site in nginx (entry for your site):
+```
+$ sudo nano /etc/nginx/sites-available/milkapp
+```
+
+```
+server {
+        listen 80;
+        server_name milkman.dnsexample.com;
+
+        location /static/ {
+                autoindex off;
+                alias /opt/milkman/static/;
+        }
+
+        location / {
+                include proxy_params;
+                proxy_pass http://0.0.0.0:8001;
+        }
+}
+
+```
+
+* Activate the site (creates a symbolic link):
+```
+$ sudo ln -s /etc/nginx/sites-available/milkapp /etc/nginx/sites-enabled/milkapp
+```
+
+* Reload nginx:
+```
+$ sudo service nginx reload
+```
+
+* Congratulations! Your site should now be serving the world!
